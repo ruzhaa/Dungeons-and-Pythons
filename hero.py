@@ -4,14 +4,14 @@ from spell import Spell
 
 class Hero:
 
-    def __init__(self, name, title, health=100, mana=100, mana_regeneration_rate):
+    def __init__(self, name, title, health=100, mana=100, mana_regeneration_rate=5):
         self.__name = name
         self.__title = title
         self.__health = health
         self.__mana = mana
         self.__mana_regeneration_rate = mana_regeneration_rate
-        self.__weapon = None
-        self.__spell = None
+        self._weapon = Weapon()
+        self._spell = Spell()
 
     def __get_name(self):
         return self.__name
@@ -35,7 +35,7 @@ class Hero:
 
     def can_cast(self):
         # _get_mana - metod ot class Spell - return mana_cost
-        if self.get_mana > self.__spell._get_mana():
+        if self.get_mana > self._spell._get_mana():
             return True
         return False
 
@@ -61,14 +61,15 @@ class Hero:
         if self.get_mana() < 0:
             self.__mana = 0
 
-    def equip(self, weapon):
-        self.__weapon = weapon
+    def equip(self, weapon, damage):
+        self._weapon = Weapon(weapon, damage)
 
-    def learn(self, spell):
-        self.__spell = spell
+    def learn(self, name, damage, mana_cost, cast_range):
+        self._spell = Spell(name, damage, mana_cost, cast_range)
 
-    def attack(self, by=""):
+    def attack(self, by):
         if by == "weapon":
-            self.__weapon._get_damage()
+            return self._weapon._get_damage()
         if by == "spell":
-            self.__spell._get_damage()
+            return self._spell._get_damage()
+

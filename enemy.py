@@ -28,5 +28,3 @@ class Enemy:
 
     def take_damage(self, damage):
         self.health -= damage
-
-    
