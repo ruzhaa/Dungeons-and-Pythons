@@ -7,9 +7,9 @@ class Hero:
     def __init__(self, name, title, health=100, mana=100, mana_regeneration_rate=5):
         self.__name = name
         self.__title = title
-        self.__health = health
-        self.__mana = mana
-        self.__mana_regeneration_rate = mana_regeneration_rate
+        self._health = health
+        self._mana = mana
+        self._mana_regeneration_rate = mana_regeneration_rate
         self._weapon = Weapon()
         self._spell = Spell()
 
@@ -23,10 +23,10 @@ class Hero:
         return "{} the {}".format(self.__get_name(), self.__get_title())
 
     def get_health(self):
-        return self.__health
+        return self._health
 
     def get_mana(self):
-        return self.__mana
+        return self._mana
 
     def is_alive(self):
         if self.get_health() <= 0:
@@ -40,26 +40,29 @@ class Hero:
         return False
 
     def take_damage(self, damage_points):
-        self.__health -= damage_points
+        self._health -= damage_points
         if self.get_health() <= 0:
-            self.__health = 0
+            self._health = 0
 
     def take_healing(self, healing_points):
         if self.is_alive():
-            self.__health += healing_points
+            self._health += healing_points
             if self.get_health() > 100:
-                self.__health = 100
+                self._health = 100
             return True
         else:
             return False
 
     def take_mana(self, mana_points):
         # da se dobavi pri move
-        self.__mana += mana_points
+        self._mana += mana_points
         if self.get_mana() > 100:
-            self.__mana = 100
+            self._mana = 100
         if self.get_mana() < 0:
-            self.__mana = 0
+            self._mana = 0
+
+    def regenerate_mana(self):
+        self.take_mana(self._mana_regeneration_rate)
 
     def equip(self, weapon, damage):
         self._weapon = Weapon(weapon, damage)
@@ -71,5 +74,5 @@ class Hero:
         if by == "weapon":
             return self._weapon._get_damage()
         if by == "spell":
+            self._mana -= self._spell._mana_cost
             return self._spell._get_damage()
-
